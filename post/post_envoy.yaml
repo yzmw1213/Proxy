@@ -20,6 +20,10 @@ static_resources:
                 route:
                   cluster: postservice
                   max_grpc_timeout: 2s
+              - match: { prefix: "/tagservice" }
+                route:
+                  cluster: tagservice
+                  max_grpc_timeout: 2s
               - match: { prefix: "/userservice" }
                 route:
                   cluster: userservice-envoy
@@ -40,6 +44,15 @@ static_resources:
 
   clusters:
   - name: postservice
+    connect_timeout: 15s
+    type: strict_dns
+    http2_protocol_options: {}
+    lb_policy: round_robin
+    hosts:
+    - socket_address:
+        address: post_api
+        port_value: 50053
+  - name: tagservice
     connect_timeout: 15s
     type: strict_dns
     http2_protocol_options: {}
