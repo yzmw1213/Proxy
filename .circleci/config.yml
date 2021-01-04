@@ -2,30 +2,45 @@
 version: 2.1
 
 orbs:
-  aws-ecr: circleci/aws-ecr@6.0.0
-  aws-ecs: circleci/aws-ecs@1.1.0
+  aws-ecr: circleci/aws-ecr@6.7.0
+
 # Orchestrate or schedule a set of jobs
 workflows:
-  version: 2
-  workflow:
+  build_and_push_frontProxy:
     jobs:
       - aws-ecr/build-and-push-image:
-          filters:
-            branches:
-              only: master
-          region: AWS_DEFAULT_REGION
           account-url: AWS_ECR_ACCOUNT_URL
-          repo: ${ECR_REPOSITORY_NAME}
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          create-repo: false
+          dockerfile: Dockerfile
+          path: ./front
+          region: AWS_REGION
+          repo: ${ECR_FRONTPROXY_REPOSITORY_NAME_DEV}
           tag: ${CIRCLE_SHA1}
-      - aws-ecs/deploy-service-update:
-          # イメージのビルド & プッシュが成功したら実行
-          requires:
-            - aws-ecr/build-and-push-image
-          filters:
-            branches:
-              only: master
-          aws-region: ${AWS_DEFAULT_REGION}
-          family: '${ECS_TASK}'
-          cluster-name: '${ECS_CLUSTER}'
-          service-name: '${ECS_SERVICE}'
-          container-image-name-updates: 'container=${ECS_SERVICE},tag=${CIRCLE_SHA1},image-and-tag=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPOSITORY_NAME}:${CIRCLE_SHA1}'
+
+  build_and_push_postProxy:
+    jobs:
+      - aws-ecr/build-and-push-image:
+          account-url: AWS_ECR_ACCOUNT_URL
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          create-repo: false
+          dockerfile: Dockerfile
+          path: ./post
+          region: AWS_REGION
+          repo: ${ECR_POSTPROXY_REPOSITORY_NAME_DEV}
+          tag: ${CIRCLE_SHA1}
+
+  build_and_push_userProxy:
+    jobs:
+      - aws-ecr/build-and-push-image:
+          account-url: AWS_ECR_ACCOUNT_URL
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          create-repo: false
+          dockerfile: Dockerfile
+          path: ./post
+          region: AWS_REGION
+          repo: ${ECR_USERPROXY_REPOSITORY_NAME_DEV}
+          tag: ${CIRCLE_SHA1}
