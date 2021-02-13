@@ -2,7 +2,7 @@ version: '3'
 
 services:
   front_proxy:
-    build: ./front
+    build: ./local/front
     container_name: front_proxy
     expose:
       - "8080"
@@ -13,7 +13,7 @@ services:
     networks:
       - test-network
   post_proxy:
-    build: ./post
+    build: ./local/post
     container_name: post_proxy
     expose:
       - "8081"
@@ -23,7 +23,7 @@ services:
     networks:
       - test-network
   user_proxy:
-    build: ./user
+    build: ./local/user
     container_name: user_proxy
     expose:
       - "8082"

@@ -55,7 +55,7 @@ static_resources:
     lb_policy: round_robin
     hosts:
     - socket_address:
-        address: "postservice_envoy"
+        address: post_proxy
         port_value: 8081
 
 admin:

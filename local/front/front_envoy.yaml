@@ -4,6 +4,8 @@ static_resources:
     address:
       socket_address: { address: 0.0.0.0, port_value: 8080 }
 
+    # https://github.com/envoyproxy/envoy/issues/8295
+    # https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/http/http_routing#arch-overview-http-routing-retry
     filter_chains:
     - filters:
       - name: envoy.http_connection_manager
