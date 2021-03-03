@@ -2,7 +2,9 @@ static_resources:
   listeners:
   - name: listener_0
     address:
-      socket_address: { address: 0.0.0.0, port_value: 8080 }
+      socket_address:
+        address: 0.0.0.0
+        port_value: 8080
 
     # https://github.com/envoyproxy/envoy/issues/8295
     # https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/http/http_routing#arch-overview-http-routing-retry
@@ -21,17 +23,14 @@ static_resources:
               - match: { prefix: "/userservice" }
                 route:
                   cluster: userservice-envoy
-                  # cluster: userservice
                   max_grpc_timeout: 2s
               - match: { prefix: "/postservice" }
                 route:
                   cluster: postservice-envoy
-                  # cluster: postservice
                   max_grpc_timeout: 2s
               - match: { prefix: "/tagservice" }
                 route:
                   cluster: postservice-envoy
-                  # cluster: postservice
                   max_grpc_timeout: 2s
               cors:
                 allow_origin_string_match:
@@ -45,9 +44,9 @@ static_resources:
               config:
                 path: /dev/stdout
           http_filters:
-          - name: envoy.grpc_web
-          - name: envoy.cors
-          - name: envoy.router
+          - name: envoy.filters.http.grpc_web
+          - name: envoy.filters.http.cors
+          - name: envoy.filters.http.router
 
   clusters:
   - name: postservice-envoy
@@ -58,7 +57,7 @@ static_resources:
     hosts:
     - socket_address:
         # ecs service discovery endpoint for post service
-        address: post.portfolio.dev.internal
+        address: post.portfolio.product.internal
         port_value: 8081
   - name: userservice-envoy
     connect_timeout: 15s
@@ -68,7 +67,7 @@ static_resources:
     hosts:
     - socket_address:
         # ecs service discovery endpoint for user service
-        address: user.portfolio.dev.internal
+        address: user.portfolio.product.internal
         port_value: 8082
 
 admin:

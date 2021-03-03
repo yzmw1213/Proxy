@@ -20,6 +20,7 @@ services:
       - "9901"
     ports:
       - "9901:9901"
+      - "8081:8081"
     networks:
       - test-network
   user_proxy:
@@ -30,6 +31,7 @@ services:
       - "9902"
     ports:
       - "9902:9902"
+      - "8082:8082"
     networks:
       - test-network
 networks:

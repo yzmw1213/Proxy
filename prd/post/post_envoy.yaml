@@ -2,7 +2,9 @@ static_resources:
   listeners:
   - name: postservice-listener
     address:
-      socket_address: { address: 0.0.0.0, port_value: 8081 }
+      socket_address:
+        address: 0.0.0.0
+        port_value: 8081
 
     filter_chains:
     - filters:
@@ -59,7 +61,7 @@ static_resources:
     hosts:
     - socket_address:
         # ecs service discovery endpoint for user service
-        address: user.portfolio.dev.internal
+        address: user.portfolio.product.internal
         port_value: 8082
 
 admin:

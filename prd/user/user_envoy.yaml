@@ -2,7 +2,9 @@ static_resources:
   listeners:
   - name: userservice-listener
     address:
-      socket_address: { address: 0.0.0.0, port_value: 8082 }
+      socket_address:
+        address: 0.0.0.0
+        port_value: 8082
 
     filter_chains:
     - filters:
