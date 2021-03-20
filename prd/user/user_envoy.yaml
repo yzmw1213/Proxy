@@ -22,6 +22,10 @@ static_resources:
                 route:
                   cluster: userservice
                   max_grpc_timeout: 2s
+              - match: { prefix: "/postservice" }
+                route:
+                  cluster: postservice-envoy
+                  max_grpc_timeout: 2s
               cors:
                 allow_origin_string_match:
                   - prefix: "*"
@@ -45,7 +49,16 @@ static_resources:
     - socket_address:
         address: 127.0.0.1
         port_value: 50052
-
+  - name: postservice-envoy
+    connect_timeout: 15s
+    type: logical_dns
+    http2_protocol_options: {}
+    lb_policy: round_robin
+    hosts:
+    - socket_address:
+        # ecs service discovery endpoint for post service
+        address: post.portfolio.product.internal
+        port_value: 8081
 
 admin:
   access_log_path: /tmp/admin_access.log
